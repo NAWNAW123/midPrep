@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Entry Form</title>
+  <script type="text/javascript">
+    // JavaScript code
+    function addEntry() {
+      var entryInput = document.getElementById("entryInput");
+      var entriesList = document.getElementById("entriesList");
+      
+      var entry = entryInput.value.trim();
+      
+      if (entry === "") {
+        alert("Invalid entry");
+        return;
+      }
+      
+      var entryComponents = entry.split(",");
+      
+      if (entryComponents.length !== 3) {
+        alert("Invalid entry");
+        return;
+      }
+      
+      var directoryId = entryComponents[0].trim();
+      var description = entryComponents[1].trim();
+      var duration = entryComponents[2].trim();
+      
+      var entryItem = document.createElement("ul");
+      entryItem.textContent = directoryId + " " + description + " " + duration;
+      entriesList.appendChild(entryItem);
+      
+      entryInput.value = "";
+    }
+    
+    function summary() {
+      var entriesList = document.getElementById("entriesList");
+      var summaryList = document.getElementById("summaryList");
+      
+      var entries = Array.from(entriesList.getElementsByTagName("ul"));
+      var entryCount = entries.length;
+      
+      var sortedEntries = entries.sort(function(a, b) {
+        var aDuration = parseInt(a.textContent.split(" ")[2]);
+        var bDuration = parseInt(b.textContent.split(" ")[2]);
+        return bDuration - aDuration;
+      });
+      
+      summaryList.innerHTML = " ";
+      
+      var entryCountItem = document.createElement("ul");
+      entryCountItem.textContent = "Total: " + entryCount;
+      summaryList.appendChild(entryCountItem);
+      
+      sortedEntries.forEach(function(entry) {
+        var entryItem = document.createElement("ul");
+        entryItem.textContent = entry.textContent.replace(/ /g, ", ");
+        summaryList.appendChild(entryItem);
+      });
+    }
+  </script>
+</head>
+<body>
+  <h1>Entry Form</h1>
+  
+  <label for="entryInput">Entry:</label>
+  <input type="text" id="entryInput"><br><br>
+  <button onclick="addEntry()">AddEntry</button>
+  <button onclick="summary()">Summary</button>
+  
+  <h2>Entries</h2>
+  <ul id="entriesList"></ul>
+  
+  <h2>Summary</h2>
+  <ul id="summaryList"></ul>
+</body>
+</html>
+
